@@ -1,8 +1,8 @@
 %global srcrepo silica-icons
-%global commit v0.3.2
+%global commit v0.4.2
 
 Name:           silica-icons
-Version:        0.3.2
+Version:        0.4.2
 Release:        1%{?dist}
 Summary:        Silica's icons: apps, files and folders, system symbols
 
@@ -39,5 +39,8 @@ find %{buildroot}%{_datadir}/silica/icons -name preview.png -delete
 %{_datadir}/silica/icons/
 
 %changelog
+* Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0.4.2-1
+- Update to 0.4.2
+
 * Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0.3.0-1
 - First package

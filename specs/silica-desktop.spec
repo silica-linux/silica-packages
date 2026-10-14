@@ -2,7 +2,7 @@
 # prepare: flutter shell
 
 %global srcrepo silica-desktop
-%global commit d4522cd091990477fd4865a660a3f1af6e1f0288
+%global commit 271010a5358d9ea49833f88a6ee1343afe87b041
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 
@@ -74,10 +74,13 @@ silica-app starts it with the system's release engine.
 
 %package -n silica-daemon
 Summary:        Silica's session services on D-Bus (notifications, system state)
+# pw-play, for the interface sounds.
+Requires:       pipewire-utils
 
 %description -n silica-daemon
 silica-daemon owns org.freedesktop.Notifications and dev.frascella.Silica on the session
-bus: notifications and the system state shown by the Control Center.
+bus: notifications and the system state shown by the Control Center, and the interface
+sounds (played with pw-play).
 
 %package -n silica-portal
 Summary:        xdg-desktop-portal backend for Silica
@@ -113,6 +116,7 @@ Requires:       silica-shell = %{version}-%{release}
 Requires:       silica-daemon = %{version}-%{release}
 Requires:       silica-portal = %{version}-%{release}
 Requires:       dbus-tools
+Requires:       adwaita-cursor-theme
 Recommends:     rsms-inter-fonts
 Recommends:     silica-icons
 Recommends:     mustache
@@ -175,6 +179,10 @@ sed 's|@PORTAL@|%{_libexecdir}/silica/silica-portal|' \
 install -Dpm 0644 org.freedesktop.impl.portal.desktop.silica.service \
   %{buildroot}%{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.silica.service
 
+# The interface sounds, played by silica-daemon from $XDG_DATA_DIRS/silica/sounds.
+install -dm 0755 %{buildroot}%{_datadir}/silica/sounds
+install -pm 0644 data/sounds/*.wav %{buildroot}%{_datadir}/silica/sounds/
+
 # The shell: flutter_assets with libapp.so next to it, as the embedder expects.
 install -dm 0755 %{buildroot}%{_libdir}/silica/shell
 cp -a shell-bundle/flutter_assets %{buildroot}%{_libdir}/silica/shell/
@@ -211,6 +219,8 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %license LICENSE-MIT LICENSE-APACHE
 %dir %{_libexecdir}/silica
 %{_libexecdir}/silica/silica-daemon
+%dir %{_datadir}/silica
+%{_datadir}/silica/sounds/
 %{_datadir}/dbus-1/services/dev.frascella.Silica.service
 
 %files -n silica-portal

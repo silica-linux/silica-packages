@@ -32,6 +32,9 @@ export SILICA_ICONS_DIR="${SILICA_ICONS_DIR:-/usr/share/silica/icons}"
 export XDG_CURRENT_DESKTOP=Silica
 export XDG_SESSION_DESKTOP=silica
 export XDG_SESSION_TYPE=wayland
+# Ossido loads the Adwaita XCursor theme (adwaita-cursor-theme).
+export XCURSOR_THEME="${XCURSOR_THEME:-Adwaita}"
+export XCURSOR_SIZE="${XCURSOR_SIZE:-24}"
 # silica-daemon, silica-portal and the embedder live in libexec: Ossido looks for the
 # services next to its own binary, then in PATH.
 export PATH="@LIBEXECDIR@/silica:$PATH"
@@ -78,7 +81,7 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
   # D-Bus activation (the portal, the mail engine) learns the Wayland socket once Ossido has
   # it (Ossido passes WAYLAND_DISPLAY to what it spawns).
   set -- "$@" \
-    --spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE" \
+    --spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE XCURSOR_THEME XCURSOR_SIZE" \
     --spawn "silica-daemon --replace"
 else
   # No user bus (a bare TTY or seatd-launch): Ossido starts a private one with
