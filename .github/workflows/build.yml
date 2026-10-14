@@ -94,7 +94,7 @@ jobs:
     needs: rpm
     if: startsWith(github.ref, 'refs/tags/v') && vars.COPR_PROJECT != ''
     runs-on: ubuntu-24.04
-    container: registry.fedoraproject.org/fedora:45
+    container: registry.fedoraproject.org/fedora:44
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -119,5 +119,5 @@ jobs:
             out/silica-desktop-*.src.rpm out/silica-mustache-*.src.rpm \
             out/silica-clock-*.src.rpm out/silica-calculator-*.src.rpm \
             out/silica-terminal-*.src.rpm out/silica-mail-*.src.rpm; do
-            copr-cli build --nowait --chroot "fedora-${FEDORA:-45}-x86_64" "$COPR_PROJECT" "$srpm"
+            copr-cli build --nowait --chroot "fedora-${FEDORA:-44}-x86_64" "$COPR_PROJECT" "$srpm"
           done

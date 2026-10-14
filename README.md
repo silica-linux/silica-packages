@@ -99,7 +99,7 @@ Publishing on COPR (`dnf copr enable`) is wired in CI and waits for the `COPR_TO
 
 ## CI
 
-`.github/workflows/build.yml`: one job per package in a `fedora:45` container, the RPMs as
+`.github/workflows/build.yml`: one job per package in a `fedora:44` container, the RPMs as
 artifacts, then the dnf repository; on `v*` tags the GitHub release and, when configured,
 the COPR builds, and a `packages-release` dispatch to silica-os (secret
 `SILICA_OS_DISPATCH_TOKEN`, a token allowed to create dispatch events there; skipped when
