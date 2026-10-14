@@ -1,3 +1,5 @@
+![silica-packages](.github/banner.png)
+
 # silica-packages
 
 I pacchetti di [Silica](https://github.com/silica-linux/silica-desktop) per Fedora: il desktop
