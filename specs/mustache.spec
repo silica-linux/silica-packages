@@ -1,7 +1,7 @@
 # prepare: flutter .
 
 %global srcrepo mustache
-%global commit a10918b4ba5b42b17daa7149c023ff811025ac3d
+%global commit b4f1048c2f2f5bbdb2279be3731e481ffe6851ba
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 %global appid dev.frascella.Mustache

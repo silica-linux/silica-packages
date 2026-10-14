@@ -1,7 +1,7 @@
 # prepare: flutter .
 
 %global srcrepo calculator
-%global commit b8b14c802297241a9e17ee5cc2e69f396cef7ca1
+%global commit 66b1724ca8618b31f51f0801b8b9f34470a6797a
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 %global appid dev.frascella.Calculator
