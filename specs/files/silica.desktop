@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Silica
+Comment=The Silica desktop
+Comment[it]=Il desktop Silica
+Exec=/usr/bin/silica-session
+TryExec=/usr/bin/silica-session
+Type=Application
+DesktopNames=Silica

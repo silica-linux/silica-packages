@@ -1,0 +1,7 @@
+#!/bin/sh
+# silica-app: the Flutter embedder with the system's release engine, for the shell
+# components and the apps (their .desktop entries run `silica-app <args> <bundle>`).
+exec @LIBEXECDIR@/silica/silica-embedder \
+  --engine @LIBDIR@/silica/engine \
+  --renderer "${SILICA_RENDERER:-vulkan}" \
+  "$@"

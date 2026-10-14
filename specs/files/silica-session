@@ -1,0 +1,63 @@
+#!/bin/sh
+# silica-session: the Silica Wayland session, started by the login manager from
+# /usr/share/wayland-sessions/silica.desktop. Ossido on DRM/KMS (seat from logind or seatd)
+# with the shell components; the list mirrors silica-desktop's `cargo xtask run --shell`
+# (xtask/src/main.rs, shell_component_args).
+#
+# Configuration: /etc/silica/session.env, then /etc/silica/session.env.d/*.env (shell
+# variable assignments, exported; silica-os drops its own files there):
+#   SILICA_RENDERER  renderer of the Flutter embedder: vulkan (default, falls back to GL),
+#                    gl, impeller or software (virtual machines without 3D)
+#   SILICA_BACKEND   Ossido backend (default: drm, or winit when started inside another
+#                    Wayland or X11 session)
+#   OSSIDO_ARGS      extra arguments for Ossido, split on spaces (e.g. `--control 7991`)
+#
+# The seat comes from libseat: logind in a login manager session (greetd, GDM, SDDM), seatd
+# where it runs.
+
+set -a
+for env in /etc/silica/session.env /etc/silica/session.env.d/*.env; do
+  # shellcheck disable=SC1090
+  [ -r "$env" ] && . "$env"
+done
+set +a
+export SILICA_RENDERER="${SILICA_RENDERER:-vulkan}"
+
+export XDG_CURRENT_DESKTOP=Silica
+export XDG_SESSION_DESKTOP=silica
+export XDG_SESSION_TYPE=wayland
+# silica-daemon, silica-portal and the embedder live in libexec: Ossido looks for the
+# services next to its own binary, then in PATH.
+export PATH="@LIBEXECDIR@/silica:$PATH"
+
+embedder="@LIBEXECDIR@/silica/silica-app"
+bundle="@LIBDIR@/silica/shell/flutter_assets"
+
+set -- \
+  --spawn-shell "$embedder --layer background --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --namespace wallpaper --dart-arg wallpaper $bundle" \
+  --spawn-shell "$embedder --layer top --anchor top,left,right --size 1280x30 --exclusive-zone 30 --namespace menubar --dart-arg menubar $bundle" \
+  --spawn-shell "$embedder --layer top --anchor left,right,bottom --size 1280x200 --exclusive-zone 84 --namespace dock --dart-arg dock $bundle" \
+  --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --keyboard none --namespace faro --dart-arg faro $bundle" \
+  --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace switcher --dart-arg switcher $bundle" \
+  --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace notifications --dart-arg notifications $bundle" \
+  --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace controlcenter --dart-arg controlcenter $bundle"
+
+if [ -n "$SILICA_BACKEND" ]; then
+  set -- --backend "$SILICA_BACKEND" "$@"
+fi
+
+if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
+  # A login session has its user bus: silica-daemon takes the notification names on it, and
+  # D-Bus activation (the portal, the mail engine) learns the Wayland socket once Ossido has
+  # it (Ossido passes WAYLAND_DISPLAY to what it spawns).
+  set -- "$@" \
+    --spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE" \
+    --spawn "silica-daemon --replace"
+else
+  # No user bus (a bare TTY or seatd-launch): Ossido starts a private one with
+  # silica-daemon and silica-portal on it.
+  set -- --session-bus "$@"
+fi
+
+# shellcheck disable=SC2086
+exec /usr/bin/ossido $OSSIDO_ARGS "$@"

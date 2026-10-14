@@ -96,7 +96,7 @@ build() {
   local repo ref src
   repo="$(global srcrepo "$spec")"
   ref="$(global commit "$spec")"
-  log "$pkg: $repo at $ref"
+  log "$pkg${repo:+: $repo at $ref}"
   cp "$spec" "$top/SPECS/"
 
   if [ -n "$repo" ]; then
@@ -137,12 +137,14 @@ build() {
 
   dnf -y -q builddep "$top/SPECS/$pkg.spec" >/dev/null
   rpmbuild --define "_topdir $top" -ba "$top/SPECS/$pkg.spec"
+  # Copied after each package, so a later failure keeps what was built.
+  find "$top/RPMS" "$top/SRPMS" -name '*.rpm' -exec mv -t /out {} +
+  chown -R "${OWNER:-0:0}" /out 2>/dev/null || true
 }
 
 for pkg in "$@"; do
   build "$pkg"
 done
 
-find "$top/RPMS" "$top/SRPMS" -name '*.rpm' -exec cp -t /out {} +
-chown -R "${OWNER:-0:0}" /out /cache 2>/dev/null || true
+chown -R "${OWNER:-0:0}" /cache 2>/dev/null || true
 log "done: $*"
