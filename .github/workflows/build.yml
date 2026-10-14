@@ -1,0 +1,123 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+env:
+  FEDORA: '45'
+  CONTAINER: podman
+
+jobs:
+  rpm:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - silica-icons
+          - silica-flutter-engine
+          - silica-desktop
+          - mustache
+          - clock
+          - calculator
+          - terminal
+          - mail
+    steps:
+      - uses: actions/checkout@v4
+      # The Flutter SDK, the pub and cargo caches; the engine tarball (a release asset).
+      - uses: actions/cache@v4
+        with:
+          path: .cache
+          key: silica-packages-${{ env.FEDORA }}-${{ matrix.package }}-${{ hashFiles('specs/silica-flutter-engine.spec') }}
+          restore-keys: silica-packages-${{ env.FEDORA }}-${{ matrix.package }}-
+      - name: Build
+        env:
+          # The sources are public; the token only raises the API rate limits.
+          GH_TOKEN: ${{ github.token }}
+        run: tools/build.sh ${{ matrix.package }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpm-${{ matrix.package }}
+          path: out/fc${{ env.FEDORA }}/*.rpm
+          if-no-files-found: error
+
+  # The dnf repository: every binary RPM with repodata, as one archive, and silica.repo.
+  # On a tag both are attached to the GitHub release of the tag.
+  repo:
+    needs: rpm
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rpm-*
+          path: out/rpms
+          merge-multiple: true
+      - name: createrepo
+        run: tools/repo.sh out/rpms out/repo
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dnf-repo
+          path: out/repo
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tar -C out -cf - repo | zstd -19 -T0 -o "silica-repo-${GITHUB_REF_NAME}-fc${FEDORA}.tar.zst"
+          gh release create "$GITHUB_REF_NAME" --title "Silica packages $GITHUB_REF_NAME" \
+            --notes "RPMs for Fedora ${FEDORA}, x86_64. See README: Installing." \
+            "silica-repo-${GITHUB_REF_NAME}-fc${FEDORA}.tar.zst" out/repo/silica.repo \
+            out/rpms/*.rpm
+      # silica-os rebuilds its image on every packages release.
+      - name: Notify silica-os
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          DISPATCH_TOKEN: ${{ secrets.SILICA_OS_DISPATCH_TOKEN }}
+        run: |
+          if [ -z "$DISPATCH_TOKEN" ]; then
+            echo "SILICA_OS_DISPATCH_TOKEN secret missing: skipped"
+            exit 0
+          fi
+          GH_TOKEN="$DISPATCH_TOKEN" gh api repos/silica-linux/silica-os/dispatches \
+            -f event_type=packages-release -f "client_payload[tag]=$GITHUB_REF_NAME"
+
+  # COPR builds the source RPMs again on its own builders. Skipped until the COPR_TOKEN
+  # secret holds the content of the ~/.config/copr file
+  # (https://copr.fedorainfracloud.org/api/) and the COPR_PROJECT variable names the
+  # project (owner/name).
+  copr:
+    needs: rpm
+    if: startsWith(github.ref, 'refs/tags/v') && vars.COPR_PROJECT != ''
+    runs-on: ubuntu-24.04
+    container: registry.fedoraproject.org/fedora:45
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: rpm-*
+          path: out
+          merge-multiple: true
+      - name: Submit
+        env:
+          COPR_TOKEN: ${{ secrets.COPR_TOKEN }}
+          COPR_PROJECT: ${{ vars.COPR_PROJECT }}
+        run: |
+          if [ -z "$COPR_TOKEN" ]; then
+            echo "COPR_TOKEN secret missing: skipped"
+            exit 0
+          fi
+          dnf -y -q install copr-cli
+          mkdir -p ~/.config
+          printf '%s\n' "$COPR_TOKEN" > ~/.config/copr
+          # The engine first: the shell and the apps need it at install time only, but a
+          # single ordered batch keeps the repository consistent.
+          for srpm in out/silica-icons-*.src.rpm out/silica-flutter-engine-*.src.rpm \
+            out/silica-desktop-*.src.rpm out/silica-mustache-*.src.rpm \
+            out/silica-clock-*.src.rpm out/silica-calculator-*.src.rpm \
+            out/silica-terminal-*.src.rpm out/silica-mail-*.src.rpm; do
+            copr-cli build --nowait --chroot "fedora-${FEDORA:-45}-x86_64" "$COPR_PROJECT" "$srpm"
+          done
