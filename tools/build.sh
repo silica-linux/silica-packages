@@ -69,9 +69,12 @@ done
 
 # The container runs as root; the files it writes in out/ and .cache/ are handed back to
 # the caller at the end (docker; rootless podman maps root to the caller already).
+# TAR_OPTIONS: the Flutter SDK unpacks its artifacts as "root", which under rootless podman
+# cannot take the archives' original owners.
 owner="$(id -u):$(id -g)"
 "$container" run --rm \
   -e GH_TOKEN="$token" -e OWNER="$owner" -e FEDORA="$fedora" \
+  -e TAR_OPTIONS=--no-same-owner \
   -v "$root:/src:ro,z" -v "$cache:/cache:z" -v "$out:/out:z" \
   "${IMAGE:-registry.fedoraproject.org/fedora:$fedora}" \
   bash /src/tools/container.sh "$@"
