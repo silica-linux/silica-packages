@@ -11,6 +11,9 @@
 #   SILICA_BACKEND   Ossido backend (default: drm, or winit when started inside another
 #                    Wayland or X11 session)
 #   OSSIDO_ARGS      extra arguments for Ossido, split on spaces (e.g. `--control 7991`)
+#   SILICA_PREFIX    development: a tree with bin/, engine/, shell/ and optionally share/
+#                    and icons/ (silica-desktop's `cargo xtask os deploy`) used instead of
+#                    the installed session
 #
 # The seat comes from libseat: logind in a login manager session (greetd, GDM, SDDM), seatd
 # where it runs.
@@ -22,6 +25,9 @@ for env in /etc/silica/session.env /etc/silica/session.env.d/*.env; do
 done
 set +a
 export SILICA_RENDERER="${SILICA_RENDERER:-vulkan}"
+# The apps take their symbols from silica-icons: the installed copy unless a dev tree or
+# the session environment says otherwise.
+export SILICA_ICONS_DIR="${SILICA_ICONS_DIR:-/usr/share/silica/icons}"
 
 export XDG_CURRENT_DESKTOP=Silica
 export XDG_SESSION_DESKTOP=silica
@@ -32,6 +38,16 @@ export PATH="@LIBEXECDIR@/silica:$PATH"
 
 embedder="@LIBEXECDIR@/silica/silica-app"
 bundle="@LIBDIR@/silica/shell/flutter_assets"
+ossido=/usr/bin/ossido
+if [ -n "$SILICA_PREFIX" ] && [ -x "$SILICA_PREFIX/bin/ossido" ]; then
+  # silica-app reads SILICA_PREFIX too: the apps run on the same embedder and engine.
+  export SILICA_PREFIX
+  export PATH="$SILICA_PREFIX/bin:$PATH"
+  export XDG_DATA_DIRS="$SILICA_PREFIX/share:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
+  [ -d "$SILICA_PREFIX/icons" ] && export SILICA_ICONS_DIR="$SILICA_PREFIX/icons"
+  bundle="$SILICA_PREFIX/shell/flutter_assets"
+  ossido="$SILICA_PREFIX/bin/ossido"
+fi
 
 set -- \
   --spawn-shell "$embedder --layer background --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --namespace wallpaper --dart-arg wallpaper $bundle" \
@@ -60,4 +76,4 @@ else
 fi
 
 # shellcheck disable=SC2086
-exec /usr/bin/ossido $OSSIDO_ARGS "$@"
+exec "$ossido" $OSSIDO_ARGS "$@"

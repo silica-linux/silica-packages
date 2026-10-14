@@ -1,6 +1,11 @@
 #!/bin/sh
 # silica-app: the Flutter embedder with the system's release engine, for the shell
 # components and the apps (their .desktop entries run `silica-app <args> <bundle>`).
+# SILICA_PREFIX (development, see silica-session): the embedder and engine of that tree.
+if [ -n "$SILICA_PREFIX" ] && [ -x "$SILICA_PREFIX/bin/silica-embedder" ]; then
+  exec "$SILICA_PREFIX/bin/silica-embedder" --engine "$SILICA_PREFIX/engine" \
+    --renderer "${SILICA_RENDERER:-vulkan}" "$@"
+fi
 exec @LIBEXECDIR@/silica/silica-embedder \
   --engine @LIBDIR@/silica/engine \
   --renderer "${SILICA_RENDERER:-vulkan}" \
