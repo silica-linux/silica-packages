@@ -11,6 +11,9 @@ env:
   FEDORA: '44'
   CONTAINER: podman
 
+permissions:
+  contents: write
+
 jobs:
   rpm:
     runs-on: ubuntu-24.04

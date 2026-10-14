@@ -2,7 +2,7 @@
 # prepare: flutter shell
 
 %global srcrepo silica-desktop
-%global commit 0823efa7d85bee8f97cda71ae317429b726f5764
+%global commit 6cb822da2219919a22bc1179e8022bdaea149e3b
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 

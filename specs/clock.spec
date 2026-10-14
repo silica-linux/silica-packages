@@ -1,7 +1,7 @@
 # prepare: flutter .
 
 %global srcrepo clock
-%global commit 61de56bab9c7fa32e55b0e345dd967402048cb97
+%global commit 42647fd5c539e2f0cf38821cd214c463672b47cd
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 %global appid dev.frascella.Clock

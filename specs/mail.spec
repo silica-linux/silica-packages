@@ -2,7 +2,7 @@
 # prepare: flutter app
 
 %global srcrepo mail
-%global commit a4e71f10320ef3c49c03c1e212ddd5484ff11de7
+%global commit 7497661c14ab20698ae6ae2cda42032f22d01a6c
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 %global appid dev.frascella.Mail

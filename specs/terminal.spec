@@ -1,7 +1,7 @@
 # prepare: flutter .
 
 %global srcrepo terminal
-%global commit fb743aefe7791d41dbf44e3887fafd8674f68752
+%global commit 7c06da7781789a40656605ff4a6f2b55753e3dd9
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 %global appid dev.frascella.Terminal
