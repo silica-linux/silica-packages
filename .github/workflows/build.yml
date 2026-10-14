@@ -29,6 +29,7 @@ jobs:
           - calculator
           - terminal
           - mail
+          - settings
     steps:
       - uses: actions/checkout@v4
       # The Flutter SDK, the pub and cargo caches; the engine tarball (a release asset).
@@ -121,6 +122,7 @@ jobs:
           for srpm in out/silica-icons-*.src.rpm out/silica-flutter-engine-*.src.rpm \
             out/silica-desktop-*.src.rpm out/silica-mustache-*.src.rpm \
             out/silica-clock-*.src.rpm out/silica-calculator-*.src.rpm \
-            out/silica-terminal-*.src.rpm out/silica-mail-*.src.rpm; do
+            out/silica-terminal-*.src.rpm out/silica-mail-*.src.rpm \
+            out/silica-settings-*.src.rpm; do
             copr-cli build --nowait --chroot "fedora-${FEDORA:-44}-x86_64" "$COPR_PROJECT" "$srpm"
           done

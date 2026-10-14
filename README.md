@@ -37,7 +37,7 @@ x86_64 today).
 | `silica-session` | silica-desktop | `silica-session` and the `wayland-sessions` entry |
 | `silica-flutter-engine` | Flutter (prebuilt, see [docs/engine.md](docs/engine.md)) | `libflutter_engine.so` in release mode, `/usr/lib64/silica/engine` |
 | `silica-icons` | silica-icons | `/usr/share/silica/icons` |
-| `mustache`, `clock`, `calculator`, `terminal` | the app repositories | `/usr/lib64/silica/apps/<app id>` and the `.desktop` entry |
+| `mustache`, `clock`, `calculator`, `terminal`, `settings` | the app repositories | `/usr/lib64/silica/apps/<app id>` and the `.desktop` entry |
 | `mail`, `silica-mail-engine` | mail | the app, and the IMAP/SMTP engine started by D-Bus activation |
 
 Inter comes from Fedora (`rsms-inter-fonts`, recommended by `silica-session`); `silica_ui`
@@ -51,7 +51,7 @@ silica-desktop ─▶ silica-session ─┬▶ ossido
                                   ├▶ silica-daemon
                                   └▶ silica-portal ─▶ xdg-desktop-portal
                                      (recommends: mustache, silica-icons, rsms-inter-fonts)
-mustache, clock, calculator, terminal, mail ─▶ silica-embedder
+mustache, clock, calculator, terminal, mail, settings ─▶ silica-embedder
 mail ─▶ silica-mail-engine
 ```
 
