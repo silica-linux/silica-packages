@@ -20,7 +20,7 @@
 The first step towards the distribution: Silica installable on any Fedora, without
 reinstalling. The same packages feed the image of [`silica-os`](https://github.com/silica-linux/silica-os).
 
-Target: **Fedora 45, x86_64** (the Flutter engine and the Dart AOT bundles exist only for
+Target: **Fedora 44, x86_64** (the Flutter engine and the Dart AOT bundles exist only for
 x86_64 today).
 
 ## Packages
@@ -59,7 +59,7 @@ mail ─▶ silica-mail-engine
 
 ```bash
 tools/build.sh silica-desktop mustache   # or: tools/build.sh all
-ls out/fc45/                                    # RPMs and SRPMs
+ls out/fc44/                                    # RPMs and SRPMs
 ```
 
 `tools/build.sh` runs everything in a Fedora container (podman, or docker): it fetches each
@@ -72,7 +72,7 @@ RPMs are self-contained.
 - `CACHE` (default `.cache/`): the Flutter SDK, the pub and cargo caches and the engine
   tarball, shared between builds.
 - `ENGINE`: a local engine tarball (`tools/engine-tarball.sh`) instead of the release asset.
-- `FEDORA` (default 45), `CONTAINER`, `IMAGE`.
+- `FEDORA` (default 44), `CONTAINER`, `IMAGE`.
 
 To package a new version of a component, update `%global commit` (and `snapdate`) in its
 spec, the `Version` if the source has a new tag, and add a `%changelog` entry.
@@ -80,11 +80,11 @@ spec, the `Version` if the source has a new tag, and add a `%changelog` entry.
 ## Installing
 
 Every tag of this repository builds all the packages in CI and attaches to its GitHub
-release the RPMs, a dnf repository (`silica-repo-<tag>-fc45.tar.zst`) and `silica.repo`.
+release the RPMs, a dnf repository (`silica-repo-<tag>-fc44.tar.zst`) and `silica.repo`.
 
 ```bash
 sudo mkdir -p /var/lib/silica-repo
-sudo tar -C /var/lib/silica-repo --strip-components=1 -xf silica-repo-<tag>-fc45.tar.zst
+sudo tar -C /var/lib/silica-repo --strip-components=1 -xf silica-repo-<tag>-fc44.tar.zst
 sudo cp silica.repo /etc/yum.repos.d/
 sudo dnf install silica-desktop mustache silica-icons
 ```

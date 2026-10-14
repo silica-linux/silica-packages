@@ -6,7 +6,7 @@
 # the container, the RPMs and SRPMs land in out/<fedora>/.
 #
 # Environment:
-#   FEDORA     Fedora release of the container (default 45)
+#   FEDORA     Fedora release of the container (default 44, the current stable release, as silica-os)
 #   GH_TOKEN   optional: the silica-linux repositories are public, a token only raises the
 #              GitHub rate limits
 #   CACHE      cache directory shared between builds (default .cache/): the Flutter SDK, the
@@ -18,7 +18,7 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
-fedora="${FEDORA:-45}"
+fedora="${FEDORA:-44}"
 cache="${CACHE:-$root/.cache}"
 out="$root/out/fc$fedora"
 

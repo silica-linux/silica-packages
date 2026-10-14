@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  FEDORA: '45'
+  FEDORA: '44'
   CONTAINER: podman
 
 jobs:
