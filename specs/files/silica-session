@@ -58,6 +58,17 @@ set -- \
   --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace notifications --dart-arg notifications $bundle" \
   --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace controlcenter --dart-arg controlcenter $bundle"
 
+# The file manager's desktop (silica-desktop#147): Mustache's --desktop mode on the bottom
+# layer, above the wallpaper and below the windows, kept running by Ossido.
+desktop="@LIBDIR@/silica/apps/dev.frascella.Mustache/flutter_assets"
+if [ -n "$SILICA_PREFIX" ] && [ -d "$SILICA_PREFIX/apps/dev.frascella.Mustache/flutter_assets" ]; then
+  desktop="$SILICA_PREFIX/apps/dev.frascella.Mustache/flutter_assets"
+fi
+if [ -d "$desktop" ]; then
+  set -- "$@" \
+    --keep-shell "$embedder --layer bottom --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard on-demand --namespace desktop-icons:dev.frascella.Mustache --dart-arg --desktop $desktop"
+fi
+
 if [ -n "$SILICA_BACKEND" ]; then
   set -- --backend "$SILICA_BACKEND" "$@"
 fi
