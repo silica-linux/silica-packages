@@ -94,7 +94,8 @@ Summary:        Command line client for Ossido's control channel
 
 %description -n silica-cli
 silica-cli talks to a running Ossido through its control channel (commands, screenshots,
-synthetic input) and serves it over MCP.
+synthetic input) and serves it over MCP. silica-action, from the same crate, runs the
+shell's actions (the Apps and Screenshot entries call it).
 
 %package -n silica-shell
 Summary:        The Silica shell: menu bar, Dock, Faro, Control Center, notifications
@@ -134,7 +135,7 @@ zstd -dc %{SOURCE2} | tar -x -C shell-bundle
 %cargo_vendor_manifest
 
 %install
-for bin in ossido silica-cli; do
+for bin in ossido silica-cli silica-action; do
   install -Dpm 0755 target/rpm/$bin %{buildroot}%{_bindir}/$bin
 done
 for bin in silica-embedder silica-daemon silica-portal; do
@@ -152,6 +153,15 @@ install -Dpm 0644 %{SOURCE4} %{buildroot}%{_datadir}/wayland-sessions/silica.des
 subst %{SOURCE6} > dev.frascella.Silica.service
 install -Dpm 0644 dev.frascella.Silica.service \
   %{buildroot}%{_datadir}/dbus-1/services/dev.frascella.Silica.service
+
+# The shell's own applications (Apps, Screenshot): the templates with their @ACTION@
+# replaced by silica-action, as xtask's shell_entries does.
+for template in shell/linux/*.desktop.in; do
+  entry=$(basename "$template" .in)
+  sed 's|@ACTION@|%{_bindir}/silica-action|g' "$template" \
+    > "$entry"
+  install -Dpm 0644 "$entry" %{buildroot}%{_datadir}/applications/"$entry"
+done
 
 # The portal: the backend, the .portal file and the configuration that picks it when
 # XDG_CURRENT_DESKTOP=Silica.
@@ -176,6 +186,11 @@ install -pm 0644 shell-bundle/libapp.so %{buildroot}%{_libdir}/silica/shell/liba
 # A session entry, not an application: desktop-file-validate rejects DesktopNames there.
 grep -q '^Exec=/usr/bin/silica-session$' %{buildroot}%{_datadir}/wayland-sessions/silica.desktop
 sh -n %{buildroot}%{_bindir}/silica-session
+# Not desktop-file-validate: OnlyShowIn=Silica is not a registered desktop.
+for entry in dev.frascella.Apps dev.frascella.Screenshot; do
+  grep -q '^Exec=%{_bindir}/silica-action ' %{buildroot}%{_datadir}/applications/$entry.desktop
+done
+! grep -rq '@ACTION@' %{buildroot}%{_datadir}/applications
 sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 
 %files
@@ -209,6 +224,9 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %files -n silica-cli
 %license LICENSE-MIT LICENSE-APACHE
 %{_bindir}/silica-cli
+%{_bindir}/silica-action
+%{_datadir}/applications/dev.frascella.Apps.desktop
+%{_datadir}/applications/dev.frascella.Screenshot.desktop
 
 %files -n silica-shell
 %license LICENSE-MIT LICENSE-APACHE
