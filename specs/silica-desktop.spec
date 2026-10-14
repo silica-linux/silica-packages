@@ -2,7 +2,7 @@
 # prepare: flutter shell
 
 %global srcrepo silica-desktop
-%global commit aca2d7e7c23d21e6210cb1e108df25204d28ac9d
+%global commit 0823efa7d85bee8f97cda71ae317429b726f5764
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global snapdate 20261014
 
@@ -179,24 +179,27 @@ sh -n %{buildroot}%{_bindir}/silica-session
 sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 
 %files
-# silica-desktop has no LICENSE files yet (README: MIT OR Apache-2.0).
-%license LICENSE.dependencies cargo-vendor.txt
+%license LICENSE-MIT LICENSE-APACHE LICENSE.dependencies cargo-vendor.txt
 %doc README.md
 
 %files -n ossido
+%license LICENSE-MIT LICENSE-APACHE
 %{_bindir}/ossido
 
 %files -n silica-embedder
+%license LICENSE-MIT LICENSE-APACHE
 %dir %{_libexecdir}/silica
 %{_libexecdir}/silica/silica-embedder
 %{_libexecdir}/silica/silica-app
 
 %files -n silica-daemon
+%license LICENSE-MIT LICENSE-APACHE
 %dir %{_libexecdir}/silica
 %{_libexecdir}/silica/silica-daemon
 %{_datadir}/dbus-1/services/dev.frascella.Silica.service
 
 %files -n silica-portal
+%license LICENSE-MIT LICENSE-APACHE
 %dir %{_libexecdir}/silica
 %{_libexecdir}/silica/silica-portal
 %{_datadir}/xdg-desktop-portal/portals/silica.portal
@@ -204,16 +207,19 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.silica.service
 
 %files -n silica-cli
+%license LICENSE-MIT LICENSE-APACHE
 %{_bindir}/silica-cli
 
 %files -n silica-shell
+%license LICENSE-MIT LICENSE-APACHE
 %dir %{_libdir}/silica
 %{_libdir}/silica/shell/
 
 %files -n silica-session
+%license LICENSE-MIT LICENSE-APACHE
 %{_bindir}/silica-session
 %{_datadir}/wayland-sessions/silica.desktop
 
 %changelog
-* Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014gitaca2d7e-1
+* Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014git0823efa-1
 - First package

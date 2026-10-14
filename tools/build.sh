@@ -7,8 +7,8 @@
 #
 # Environment:
 #   FEDORA     Fedora release of the container (default 45)
-#   GH_TOKEN   token that can read the silica-linux repositories (most are private); if unset,
-#              `gh auth token` is used when gh is logged in
+#   GH_TOKEN   optional: the silica-linux repositories are public, a token only raises the
+#              GitHub rate limits
 #   CACHE      cache directory shared between builds (default .cache/): the Flutter SDK, the
 #              pub and cargo caches, the prebuilt engine tarball
 #   ENGINE     path of a local engine tarball (tools/engine-tarball.sh) to use instead of the
@@ -52,9 +52,6 @@ if [ -z "$container" ]; then
 fi
 
 token="${GH_TOKEN:-}"
-if [ -z "$token" ] && command -v gh >/dev/null; then
-  token="$(gh auth token 2>/dev/null || true)"
-fi
 
 mkdir -p "$cache" "$out"
 
@@ -64,8 +61,9 @@ for pkg in "$@"; do
   if [ -n "${ENGINE:-}" ]; then
     cp "$ENGINE" "$cache/$engine_file"
   elif [ ! -f "$cache/$engine_file" ]; then
-    GH_TOKEN="$token" gh release download "engine-$engine_ver" \
-      -R silica-linux/silica-packages -p "$engine_file" -D "$cache"
+    curl -fsSL -o "$cache/$engine_file.part" \
+      "https://github.com/silica-linux/silica-packages/releases/download/engine-$engine_ver/$engine_file"
+    mv "$cache/$engine_file.part" "$cache/$engine_file"
   fi
 done
 
