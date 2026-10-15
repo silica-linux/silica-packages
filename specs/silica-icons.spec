@@ -1,8 +1,8 @@
 %global srcrepo silica-icons
-%global commit v0.5.10
+%global commit v0.6.1
 
 Name:           silica-icons
-Version:        0.5.10
+Version:        0.6.1
 Release:        1%{?dist}
 Summary:        Silica's icons: apps, files and folders, system symbols
 
