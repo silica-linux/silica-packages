@@ -2,9 +2,9 @@
 # prepare: flutter app
 
 %global srcrepo mail
-%global commit 5ded38f80e973a15ef70ec399e5a6e9c7007713f
+%global commit 46285b2ca881419941e65203c801094261543a72
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapdate 20261014
+%global snapdate 20261015
 %global appid dev.frascella.Mail
 
 # The Dart AOT library is private (dlopen'ed by the embedder).
@@ -101,5 +101,8 @@ desktop-file-validate check.desktop
 %{_datadir}/dbus-1/services/dev.frascella.Mail.service
 
 %changelog
+* Thu Oct 15 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261015git46285b2-1
+- Update to the current main (release 0.1.2)
+
 * Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014gita4e71f1-1
 - First package

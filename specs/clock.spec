@@ -1,9 +1,9 @@
 # prepare: flutter .
 
 %global srcrepo clock
-%global commit d210e516c6f6c5b79ec4ef12cf3cd13e2e9ea050
+%global commit d67d205d7d155f72400b361fa7766a65adb70a7a
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapdate 20261014
+%global snapdate 20261015
 %global appid dev.frascella.Clock
 
 # Nothing is compiled by rpmbuild (the Dart AOT library comes prebuilt, docs/flutter.md):
@@ -66,5 +66,8 @@ desktop-file-validate check.desktop
 %{_datadir}/applications/%{appid}.desktop
 
 %changelog
+* Thu Oct 15 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261015gitd67d205-1
+- Update to the current main (release 0.1.2)
+
 * Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014git61de56b-1
 - First package

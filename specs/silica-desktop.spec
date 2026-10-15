@@ -2,9 +2,9 @@
 # prepare: flutter shell
 
 %global srcrepo silica-desktop
-%global commit 271010a5358d9ea49833f88a6ee1343afe87b041
+%global commit 0ede8e3a7fa5cc22912987db041eafe5821efd38
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-%global snapdate 20261014
+%global snapdate 20261015
 
 # The shell's Dart AOT library is private (dlopen'ed by the embedder).
 %global __provides_exclude_from ^%{_libdir}/silica/.*$
@@ -198,7 +198,7 @@ install -pm 0644 shell-bundle/libapp.so %{buildroot}%{_libdir}/silica/shell/liba
 grep -q '^Exec=/usr/bin/silica-session$' %{buildroot}%{_datadir}/wayland-sessions/silica.desktop
 sh -n %{buildroot}%{_bindir}/silica-session
 # Not desktop-file-validate: OnlyShowIn=Silica is not a registered desktop.
-for entry in dev.frascella.Apps dev.frascella.Screenshot; do
+for entry in dev.frascella.Apps dev.frascella.MissionControl dev.frascella.Screenshot; do
   grep -q '^Exec=%{_bindir}/silica-action ' %{buildroot}%{_datadir}/applications/$entry.desktop
 done
 ! grep -rq '@ACTION@' %{buildroot}%{_datadir}/applications
@@ -239,6 +239,7 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %{_bindir}/silica-cli
 %{_bindir}/silica-action
 %{_datadir}/applications/dev.frascella.Apps.desktop
+%{_datadir}/applications/dev.frascella.MissionControl.desktop
 %{_datadir}/applications/dev.frascella.Screenshot.desktop
 
 %files -n silica-shell
@@ -253,5 +254,8 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %{_userunitdir}/silica-session.target
 
 %changelog
+* Thu Oct 15 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261015git0ede8e3-1
+- Update to the current main (release 0.1.2); install the Mission Control entry
+
 * Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014git0823efa-1
 - First package
