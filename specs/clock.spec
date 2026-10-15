@@ -20,7 +20,7 @@ Summary:        World clock, alarms, stopwatch and timers for Silica
 # Clock: MIT OR Apache-2.0; the Dart packages linked in libapp.so are listed in
 # flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/clock
+URL:            https://github.com/silica-os/clock
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-dart-root.tar.zst
 

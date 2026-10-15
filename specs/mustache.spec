@@ -20,7 +20,7 @@ Summary:        Mustache, the file manager of Silica
 # Mustache: MIT OR Apache-2.0; the Dart packages linked in libapp.so are listed in
 # flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/mustache
+URL:            https://github.com/silica-os/mustache
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-dart-root.tar.zst
 

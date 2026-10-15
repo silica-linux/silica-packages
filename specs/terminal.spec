@@ -20,7 +20,7 @@ Summary:        Terminal emulator of Silica
 # Terminal: MIT OR Apache-2.0; the Dart packages linked in libapp.so are listed in
 # flutter_assets/NOTICES.Z. JetBrains Mono (OFL-1.1) is bundled in the assets.
 License:        (MIT OR Apache-2.0) AND OFL-1.1 AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/terminal
+URL:            https://github.com/silica-os/terminal
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-dart-root.tar.zst
 

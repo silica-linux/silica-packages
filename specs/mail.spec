@@ -19,7 +19,7 @@ Summary:        Mail, the email client of Silica
 # (licences in LICENSE.dependencies); the Dart packages of the app in
 # flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Crates AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/mail
+URL:            https://github.com/silica-os/mail
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-vendor-engine.tar.zst
 Source2:        %{srcrepo}-%{commit}-dart-app.tar.zst

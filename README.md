@@ -18,7 +18,7 @@
 </p>
 
 The first step towards the distribution: Silica installable on any Fedora, without
-reinstalling. The same packages feed the image of [`silica-os`](https://github.com/silica-linux/silica-os).
+reinstalling. The same packages feed the image of [`silica-os`](https://github.com/silica-os/silica-os).
 
 Target: **Fedora 44, x86_64** (the Flutter engine and the Dart AOT bundles exist only for
 x86_64 today).

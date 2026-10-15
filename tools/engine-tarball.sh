@@ -7,7 +7,7 @@
 # (BSD-3-Clause) and the engine's third-party notices (the sky_engine LICENSE of the same
 # SDK). Upload it as an asset of the `engine-<flutter version>` release of this repository:
 #
-#   gh release create engine-3.47.7 -R silica-linux/silica-packages \
+#   gh release create engine-3.47.7 -R silica-os/silica-packages \
 #     --title "Flutter engine 3.47.7 (release)" out/silica-flutter-engine-<rev>-x86_64.tar.zst
 set -euo pipefail
 

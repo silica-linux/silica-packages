@@ -7,7 +7,7 @@
 #
 # Environment:
 #   FEDORA     Fedora release of the container (default 44, the current stable release, as silica-os)
-#   GH_TOKEN   optional: the silica-linux repositories are public, a token only raises the
+#   GH_TOKEN   optional: the silica-os repositories are public, a token only raises the
 #              GitHub rate limits
 #   CACHE      cache directory shared between builds (default .cache/): the Flutter SDK, the
 #              pub and cargo caches, the prebuilt engine tarball
@@ -62,7 +62,7 @@ for pkg in "$@"; do
     cp "$ENGINE" "$cache/$engine_file"
   elif [ ! -f "$cache/$engine_file" ]; then
     curl -fsSL -o "$cache/$engine_file.part" \
-      "https://github.com/silica-linux/silica-packages/releases/download/engine-$engine_ver/$engine_file"
+      "https://github.com/silica-os/silica-packages/releases/download/engine-$engine_ver/$engine_file"
     mv "$cache/$engine_file.part" "$cache/$engine_file"
   fi
 done

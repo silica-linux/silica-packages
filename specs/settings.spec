@@ -20,7 +20,7 @@ Summary:        Settings of Silica: appearance, network, sound, Dock, keyboard a
 # Settings: MIT OR Apache-2.0; the Dart packages linked in libapp.so are listed in
 # flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/settings
+URL:            https://github.com/silica-os/settings
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-dart-root.tar.zst
 

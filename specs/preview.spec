@@ -20,7 +20,7 @@ Summary:        Preview, the image and PDF viewer of Silica
 # Preview: MIT OR Apache-2.0; the Dart packages linked in libapp.so are listed in
 # flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/preview
+URL:            https://github.com/silica-os/preview
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-dart-root.tar.zst
 
@@ -30,7 +30,7 @@ BuildRequires:  desktop-file-utils
 
 Requires:       silica-embedder%{?_isa}
 # Shared libraries loaded with FFI (dlopen), invisible to rpm's dependency generator:
-# poppler-glib + cairo read and draw PDFs, qpdf-libs rewrites them (silica-linux/silica-packages#4).
+# poppler-glib + cairo read and draw PDFs, qpdf-libs rewrites them (silica-os/silica-packages#4).
 Requires:       poppler-glib
 Requires:       cairo
 Requires:       qpdf-libs

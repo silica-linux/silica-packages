@@ -18,7 +18,7 @@ Summary:        The Silica desktop: the Ossido compositor, the shell and its ser
 # and their licences summarised in LICENSE.dependencies; the Dart packages linked in the
 # shell's AOT library are listed in its flutter_assets/NOTICES.Z.
 License:        (MIT OR Apache-2.0) AND LicenseRef-Bundled-Crates AND LicenseRef-Bundled-Dart
-URL:            https://github.com/silica-linux/silica-desktop
+URL:            https://github.com/silica-os/silica-desktop
 Source0:        %{srcrepo}-%{commit}.tar.gz
 Source1:        %{srcrepo}-%{commit}-vendor-root.tar.zst
 Source2:        %{srcrepo}-%{commit}-dart-shell.tar.zst

@@ -88,7 +88,7 @@ jobs:
             echo "SILICA_OS_DISPATCH_TOKEN secret missing: skipped"
             exit 0
           fi
-          GH_TOKEN="$DISPATCH_TOKEN" gh api repos/silica-linux/silica-os/dispatches \
+          GH_TOKEN="$DISPATCH_TOKEN" gh api repos/silica-os/silica-os/dispatches \
             -f event_type=packages-release -f "client_payload[tag]=$GITHUB_REF_NAME"
 
   # COPR builds the source RPMs again on its own builders. Skipped until the COPR_TOKEN

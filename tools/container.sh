@@ -3,7 +3,7 @@
 # (read-only), /cache the shared cache, /out the destination of the RPMs.
 #
 # For each package it prepares the sources its spec declares, then runs `rpmbuild -ba`:
-#   %global srcrepo <repo>      repository under github.com/silica-linux
+#   %global srcrepo <repo>      repository under github.com/silica-os
 #   %global commit <ref>        commit or tag
 #   # prepare: rust <dir>       `cargo vendor` of the workspace in <dir> (offline rpmbuild)
 #   # prepare: flutter <dir>    the Flutter app in <dir>, built as an AOT bundle
@@ -35,9 +35,9 @@ global() { sed -n "s/^%global $1[[:space:]]*//p" "$2" | head -n1; }
 checkout() {
   local repo="$1" ref="$2" dir="/work/git/$1-$2"
   if [ ! -d "$dir/.git" ]; then
-    local url="https://github.com/silica-linux/$repo.git"
+    local url="https://github.com/silica-os/$repo.git"
     if [ -n "${GH_TOKEN:-}" ]; then
-      url="https://x-access-token:$GH_TOKEN@github.com/silica-linux/$repo.git"
+      url="https://x-access-token:$GH_TOKEN@github.com/silica-os/$repo.git"
     fi
     git init -q "$dir"
     git -C "$dir" fetch -q --depth 1 "$url" "$ref"

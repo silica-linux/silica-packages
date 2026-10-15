@@ -15,7 +15,7 @@ So the engine is built **once per Flutter version** and published as a release a
    the revision against `%global engine_rev` of `specs/silica-flutter-engine.spec` and packs the
    library, the ICU data, Flutter's `LICENSE` (BSD-3-Clause) and the engine's third-party
    notices (`bin/cache/pkg/sky_engine/LICENSE` of the SDK, shipped as `NOTICES`).
-3. Upload: `gh release create engine-<flutter version> -R silica-linux/silica-packages
+3. Upload: `gh release create engine-<flutter version> -R silica-os/silica-packages
    out/silica-flutter-engine-<rev>-x86_64.tar.zst`.
 
 `tools/build.sh silica-flutter-engine` downloads the asset of the release `engine-<version>`

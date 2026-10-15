@@ -10,7 +10,7 @@ Summary:        Silica's icons: apps, files and folders, system symbols
 # covered by CC BY-SA (README of silica-icons; silica-brand TRADEMARKS.md). Derived
 # distributions must remove it.
 License:        CC-BY-SA-4.0 AND LicenseRef-Silica-Trademark
-URL:            https://github.com/silica-linux/silica-icons
+URL:            https://github.com/silica-os/silica-icons
 Source0:        %{srcrepo}-%{commit}.tar.gz
 
 BuildArch:      noarch
