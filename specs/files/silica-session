@@ -81,7 +81,7 @@ if [ -n "$DBUS_SESSION_BUS_ADDRESS" ]; then
   # D-Bus activation (the portal, the mail engine) learns the Wayland socket once Ossido has
   # it (Ossido passes WAYLAND_DISPLAY to what it spawns).
   set -- "$@" \
-    --spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE XCURSOR_THEME XCURSOR_SIZE" \
+    --spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_DESKTOP XDG_SESSION_TYPE XCURSOR_THEME XCURSOR_SIZE && systemctl --user start silica-session.target" \
     --spawn "silica-daemon --replace"
 else
   # No user bus (a bare TTY or seatd-launch): Ossido starts a private one with
@@ -90,4 +90,8 @@ else
 fi
 
 # shellcheck disable=SC2086
-exec "$ossido" $OSSIDO_ARGS "$@"
+"$ossido" $OSSIDO_ARGS "$@"
+status=$?
+# graphical-session.target (xdg-desktop-portal requires it) goes down with the session.
+[ -n "$DBUS_SESSION_BUS_ADDRESS" ] && systemctl --user stop silica-session.target
+exit $status
