@@ -154,6 +154,9 @@ install -Dpm 0755 silica-app %{buildroot}%{_libexecdir}/silica/silica-app
 subst %{SOURCE3} > silica-session
 install -Dpm 0755 silica-session %{buildroot}%{_bindir}/silica-session
 install -Dpm 0644 %{SOURCE4} %{buildroot}%{_datadir}/wayland-sessions/silica.desktop
+# Brings graphical-session.target up, which xdg-desktop-portal requires.
+install -Dpm 0644 data/systemd/silica-session.target \
+  %{buildroot}%{_userunitdir}/silica-session.target
 subst %{SOURCE6} > dev.frascella.Silica.service
 install -Dpm 0644 dev.frascella.Silica.service \
   %{buildroot}%{_datadir}/dbus-1/services/dev.frascella.Silica.service
@@ -247,6 +250,7 @@ sh -n %{buildroot}%{_libexecdir}/silica/silica-app
 %license LICENSE-MIT LICENSE-APACHE
 %{_bindir}/silica-session
 %{_datadir}/wayland-sessions/silica.desktop
+%{_userunitdir}/silica-session.target
 
 %changelog
 * Wed Oct 14 2026 Emanuele Frascella <emanuele@frascella.dev> - 0^20261014git0823efa-1
