@@ -54,7 +54,7 @@ fi
 
 set -- \
   --spawn-shell "$embedder --layer background --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --namespace wallpaper --dart-arg wallpaper $bundle" \
-  --spawn-shell "$embedder --layer top --anchor top,left,right --size 1280x30 --exclusive-zone 30 --namespace menubar --dart-arg menubar $bundle" \
+  --spawn-shell "$embedder --layer top --anchor top,left,right --size 1280x28 --exclusive-zone 28 --namespace menubar --dart-arg menubar $bundle" \
   --spawn-shell "$embedder --layer top --anchor left,right,bottom --size 1280x200 --exclusive-zone 84 --namespace dock --dart-arg dock $bundle" \
   --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --keyboard none --namespace faro --dart-arg faro $bundle" \
   --spawn-shell "$embedder --layer overlay --anchor top,bottom,left,right --size 1280x800 --exclusive-zone -1 --keyboard none --namespace switcher --dart-arg switcher $bundle" \
